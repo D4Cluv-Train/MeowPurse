@@ -1,0 +1,27 @@
+{
+  "expo": {
+    "name": "喵记 MeowPurse",
+    "slug": "meowpurse",
+    "version": "0.0.1",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.meowpurse.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.meowpurse.app"
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}
