@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from fastapi import FastAPI
+from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 
@@ -36,11 +36,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# ============================================================
+# API 路由（统一前缀 /meowpurse/api）
+# ============================================================
+api = APIRouter(prefix="/meowpurse/api")
 
-# ============================================================
-# 健康检查
-# ============================================================
-@app.get("/api/v1/health")
+
+@api.get("/health")
 async def health_check():
     """健康检查：验证 MySQL + Redis 连通性。"""
     import redis.asyncio as aioredis
@@ -68,7 +70,10 @@ async def health_check():
 
     all_ok = all(v == "ok" for v in checks.values())
     return {
-        "code": 0 if all_ok else 1,
+        "code": 200 if all_ok else 503,
         "data": checks,
         "message": "ok" if all_ok else "service unavailable",
     }
+
+
+app.include_router(api)

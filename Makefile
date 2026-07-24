@@ -31,6 +31,6 @@ front:           ## 启动前端（Expo）
 	cd frontend && npx expo start
 
 health:          ## 健康检查
-	curl -s http://localhost:8800/api/v1/health | python3 -m json.tool
+	curl -s http://localhost:8800/meowpurse/api/health | python3 -m json.tool
 
 # ---------- 工具 ----------
