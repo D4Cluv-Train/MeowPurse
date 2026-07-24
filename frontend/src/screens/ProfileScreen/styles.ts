@@ -55,4 +55,9 @@ export default StyleSheet.create({
     fontSize: 20,
     color: "#ccc",
   },
+  logoutLabel: {
+    fontSize: 16,
+    color: "#e74c3c",
+    textAlign: "center",
+  },
 });

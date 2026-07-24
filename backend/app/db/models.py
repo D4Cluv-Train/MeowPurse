@@ -43,6 +43,15 @@ class User(Base):
     password: Mapped[str] = mapped_column(
         String(256), nullable=False, comment="bcrypt 哈希"
     )
+    email: Mapped[Optional[str]] = mapped_column(
+        String(128), unique=True, nullable=True, comment="邮箱"
+    )
+    phone: Mapped[Optional[str]] = mapped_column(
+        String(20), unique=True, nullable=True, comment="手机号"
+    )
+    signature: Mapped[str] = mapped_column(
+        String(256), default="", comment="个性签名"
+    )
     nickname: Mapped[str] = mapped_column(String(64), default="")
     avatar: Mapped[str] = mapped_column(String(512), default="")
     created_at: Mapped[datetime] = mapped_column(
@@ -65,6 +74,9 @@ class User(Base):
         password_hash: str,
         nickname: str = "",
         avatar: str = "",
+        email: str | None = None,
+        phone: str | None = None,
+        signature: str = "",
     ) -> "User":
         """创建用户实例（密码应预先经 bcrypt 哈希）。"""
         return cls(
@@ -72,6 +84,9 @@ class User(Base):
             password=password_hash,
             nickname=nickname,
             avatar=avatar,
+            email=email,
+            phone=phone,
+            signature=signature,
         )
 
     def __repr__(self) -> str:

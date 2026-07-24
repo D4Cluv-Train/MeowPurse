@@ -1,19 +1,27 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
-import { useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { fetchUserProfile } from "../../mock/mockApi";
+import { View, Text, Image, TouchableOpacity, ActivityIndicator } from "react-native";
+import { useCallback, useState } from "react";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { fetchUserProfile, removeToken } from "../../api";
 import { UserProfile } from "../../types/user";
+import ConfirmDialog from "../../components/common/Dialog";
 import styles from "./styles";
 
 const DEFAULT_AVATAR = require("../../../assets/icons/noAvatar.png");
 
 export default function ProfileScreen() {
   const [user, setUser] = useState<UserProfile | null | undefined>(undefined);
+  const [loading, setLoading] = useState(true);
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const navigation = useNavigation<any>();
 
-  useEffect(() => {
-    fetchUserProfile().then(setUser);
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      setLoading(true);
+      fetchUserProfile()
+        .then(setUser)
+        .finally(() => setLoading(false));
+    }, [])
+  );
 
   const isLoggedIn = user !== null;
   const avatarSource = user?.avatar ? { uri: user.avatar } : DEFAULT_AVATAR;
@@ -32,23 +40,43 @@ export default function ProfileScreen() {
 
   const handleMenuPress = (action: string) => {
     if (action === "settings") return;
-    if (!isLoggedIn) {
+    if (action === "logout") {
+      setShowLogoutDialog(true);
+      return;
+    }
+    if (!loggedIn) {
       navigation.navigate("Login");
       return;
     }
   };
 
-  if (user === undefined) return null;
+  const handleLogout = async () => {
+    await removeToken();
+    setUser(null);
+    setShowLogoutDialog(false);
+  };
+
+  if (loading && user === undefined) {
+    return (
+      <View style={[styles.container, { justifyContent: "center", alignItems: "center" }]}>
+        <ActivityIndicator size="large" color="#ff6b35" />
+      </View>
+    );
+  }
+
+  // 加载完成但请求失败时，显示未登录状态
+  const profile = user ?? null;
+  const loggedIn = profile !== null;
 
   return (
     <View style={styles.container}>
       {/* 头像 + 昵称 + 创建时间 */}
       <View style={styles.header}>
         <Image source={avatarSource} style={styles.avatar} />
-        {isLoggedIn ? (
+        {loggedIn ? (
           <>
-            <Text style={styles.nickname}>{user.nickname}</Text>
-            <Text style={styles.createdAt}>{formatDate(user.created_at)} 加入</Text>
+            <Text style={styles.nickname}>{profile.nickname}</Text>
+            <Text style={styles.createdAt}>{formatDate(profile.created_at)} 加入</Text>
           </>
         ) : (
           <TouchableOpacity onPress={() => navigation.navigate("Login")}>
@@ -69,7 +97,26 @@ export default function ProfileScreen() {
             <Text style={styles.menuArrow}>›</Text>
           </TouchableOpacity>
         ))}
+        {loggedIn && (
+          <TouchableOpacity
+            style={styles.menuItem}
+            onPress={() => setShowLogoutDialog(true)}
+          >
+            <Text style={styles.logoutLabel}>退出登录</Text>
+          </TouchableOpacity>
+        )}
       </View>
+
+      <ConfirmDialog
+        visible={showLogoutDialog}
+        title="退出登录"
+        message="确定要退出当前账号吗？"
+        rightText="退出"
+        rightType="warning"
+        leftText="取消"
+        onRight={handleLogout}
+        onLeft={() => setShowLogoutDialog(false)}
+      />
     </View>
   );
 }

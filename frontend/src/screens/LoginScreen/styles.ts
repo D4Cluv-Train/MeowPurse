@@ -33,6 +33,16 @@ export default StyleSheet.create({
     width: "100%",
     height: 72,
   },
+  row: {
+    flexDirection: "row",
+    gap: 12,
+    width: "100%",
+    height: 72,
+  },
+  halfFieldWrapper: {
+    flex: 1,
+    height: 72,
+  },
   input: {
     width: "100%",
     height: 48,
@@ -43,6 +53,20 @@ export default StyleSheet.create({
     fontSize: 16,
     color: "#333",
     backgroundColor: "#fafafa",
+  },
+  pwdWrapper: {
+    position: "relative",
+    justifyContent: "center",
+  },
+  eyeBtn: {
+    position: "absolute",
+    right: 12,
+    height: 48,
+    justifyContent: "center",
+    paddingHorizontal: 4,
+  },
+  eyeText: {
+    fontSize: 18,
   },
   inputError: {
     borderColor: "#e74c3c",

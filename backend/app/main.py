@@ -11,6 +11,7 @@ from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 
+from app.api.user import router as user_router
 from app.db import get_async_sessionmaker
 
 
@@ -77,3 +78,4 @@ async def health_check():
 
 
 app.include_router(api)
+api.include_router(user_router)
