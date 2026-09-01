@@ -18,7 +18,7 @@ __pycache__/
 *.swo
 
 # 项目文档
-.docs/
+
 
 # node_modules
 node_modules/
