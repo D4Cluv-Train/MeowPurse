@@ -14,10 +14,11 @@ MeowPurse（喵记）是一个前后端分离的记账应用：
 ## 分支与协作流程
 
 - `main` 是受保护的稳定分支，不直接提交或强制推送。
-- 日常开发从 `develop` 创建短生命周期分支，命名建议为 `feature/<topic>`、`fix/<topic>` 或 `chore/<topic>`。
-- 功能分支通过 Pull Request 合并回 `develop`；发布时再由 `develop` 向 `main` 提交 Pull Request。
-- 提交应保持单一目的，提交信息使用 Conventional Commits，例如 `feat(auth): add token refresh`。
-- 提交前同步目标分支，解决冲突后再发起或更新 Pull Request。
+- 所有日常改动直接在 `develop` 分支进行，不创建新的功能分支或修复分支。
+- 发布时由 `develop` 向 `main` 提交 Pull Request。
+- 提交应保持单一目的，并使用 Conventional Commits 格式：`<type>(<module>): <一段简短的中文描述改动>`。
+- 功能改动示例：`feat(auth): 增加令牌刷新机制`；其他类型可按实际情况使用 `fix`、`docs`、`refactor` 或 `chore`。
+- 提交前同步 `develop`，确认并解决冲突后再推送。
 - 不提交密钥、令牌、真实用户数据、数据库文件、构建产物或本地环境配置。
 
 ## 开发约定
